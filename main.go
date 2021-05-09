@@ -1,7 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/Mulac/soundscraper/storage"
+)
 
 func main() {
 	fmt.Println("hello")
+	_ = storage.GoogleDrive{}
 }

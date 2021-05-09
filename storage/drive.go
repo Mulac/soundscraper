@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -8,17 +9,16 @@ import (
 	"net/http"
 	"os"
 
-	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/drive/v3"
 )
 
-type googleDrive struct {
+type GoogleDrive struct {
 
 }
 
-func (gDrive *googleDrive) SaveFile(file os.File) error {
+func (gDrive *GoogleDrive) SaveFile(file os.File) error {
 	// TODO
 	return nil
 }
