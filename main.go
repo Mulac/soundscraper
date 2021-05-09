@@ -1,7 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/Mulac/soundscraper/scraper"
+)
 
 func main() {
-	fmt.Println("hello")
+	videoID := "YQHsXMglC9A"
+	scraper.Download(videoID)
 }
