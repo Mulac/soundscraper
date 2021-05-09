@@ -3,13 +3,22 @@ package main
 import (
 	"fmt"
 	"github.com/Mulac/soundscraper/storage"
-	"github.com/Mulac/soundscraper/scraper"
+	"os"
 )
 
 func main() {
 	fmt.Println("hello")
-	_ = storage.GoogleDrive{}
+	drive, err := storage.NewDrive()
+	if err != nil {
+		panic(err)
+	}
 
-	videoID := "YQHsXMglC9A"
-	scraper.Download(videoID)
+	f, err := os.Open("README.md")
+	if err != nil {
+		panic(err)
+	}
+	err = drive.SaveFile(f)
+	if err != nil {
+		panic(err)
+	}
 }

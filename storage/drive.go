@@ -12,14 +12,26 @@ import (
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/drive/v3"
+	"google.golang.org/api/option"
 )
 
-type GoogleDrive struct {
+const FOLDER = "soundscraper"
 
+type googleDrive struct {
+	service *drive.Service
 }
 
-func (gDrive *GoogleDrive) SaveFile(file os.File) error {
-	// TODO
+func (gDrive *googleDrive) SaveFile(file *os.File) error {
+	f := &drive.File{
+		DriveId:                      "",
+		Name:                         file.Name(),
+		Parents:                      []string{FOLDER},
+	}
+	_, err := gDrive.service.Files.Create(f).Media(file).Do()
+	if err != nil {
+		return fmt.Errorf("ERROR|Drive/googleDrive|could not create file %s|%v", file.Name(), err)
+	}
+
 	return nil
 }
 
@@ -78,7 +90,7 @@ func saveToken(path string, token *oauth2.Token) {
 	json.NewEncoder(f).Encode(token)
 }
 
-func main() {
+func newGoogleDrive() (*googleDrive, error) {
 	b, err := ioutil.ReadFile("credentials.json")
 	if err != nil {
 		log.Fatalf("Unable to read client secret file: %v", err)
@@ -91,22 +103,12 @@ func main() {
 	}
 	client := getClient(config)
 
-	srv, err := drive.New(client)
+	srv, err := drive.NewService(context.Background(), option.WithHTTPClient(client))
 	if err != nil {
 		log.Fatalf("Unable to retrieve Drive client: %v", err)
 	}
 
-	r, err := srv.Files.List().PageSize(10).
-		Fields("nextPageToken, files(id, name)").Do()
-	if err != nil {
-		log.Fatalf("Unable to retrieve files: %v", err)
-	}
-	fmt.Println("Files:")
-	if len(r.Files) == 0 {
-		fmt.Println("No files found.")
-	} else {
-		for _, i := range r.Files {
-			fmt.Printf("%s (%s)\n", i.Name, i.Id)
-		}
-	}
+	return &googleDrive{
+		service: srv,
+	}, nil
 }
