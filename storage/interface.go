@@ -8,5 +8,5 @@ type Drive interface {
 
 func NewDrive() (Drive, error) {
 	// TODO(calum): turn into a factory.. for now just return GDrive impl
-	drive, err :=
+	return nil, nil
 }
