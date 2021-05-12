@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/Mulac/soundscraper/scraper"
 	"github.com/Mulac/soundscraper/storage"
 	"os"
 )
