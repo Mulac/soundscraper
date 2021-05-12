@@ -11,7 +11,7 @@ import (
 type DriveType string
 
 const (
-	DRIVE_NAIVE	 DriveType = "naive"
+	DRIVE_NAIVE  DriveType = "naive"
 	DRIVE_GOODLE DriveType = "googleDrive"
 )
 

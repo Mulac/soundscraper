@@ -2,11 +2,12 @@ package storage
 
 import (
 	"fmt"
-	"github.com/Mulac/soundscraper/config"
-	"github.com/Mulac/soundscraper/util"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+
+	"github.com/Mulac/soundscraper/config"
+	"github.com/Mulac/soundscraper/util"
 )
 
 // naiveDriveManager stores files in a local directory

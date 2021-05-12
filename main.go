@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/Mulac/soundscraper/storage"
 	"os"
+
+	"github.com/Mulac/soundscraper/storage"
 )
 
 func main() {

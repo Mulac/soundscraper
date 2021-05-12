@@ -30,7 +30,6 @@ func (gd *googleDrive) SaveFile(file *os.File) error {
 	return nil
 }
 
-
 func newGoogleDrive() (*googleDrive, error) {
 	b, err := ioutil.ReadFile("credentials.json")
 	if err != nil {
