@@ -18,7 +18,7 @@ const (
 var driveSingleton DriveManager
 var once sync.Once
 
-// Drive returns the default implementation set via config
+// Drive returns the default DriveManager implementation set via config
 func Drive() DriveManager {
 	once.Do(func() {
 		d, err := NewDriveFactory().SetType(DriveType(config.Manager().GetString(util.ENV_DRIVE_IMPL))).New()
