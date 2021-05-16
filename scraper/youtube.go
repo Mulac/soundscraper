@@ -18,6 +18,7 @@ func newYoutubeDownloadManager() (*youtubeScraper, error) {
 }
 
 func (s *youtubeScraper) Download(videoID string) error {
+	// TODO(lucy): put the client in the youtubeScraper struct so that we don't create new client each time we download a video
 	client := youtube.Client{}
 
 	video, err := client.GetVideo(videoID)
@@ -34,6 +35,8 @@ func (s *youtubeScraper) Download(videoID string) error {
 
 	videoname := "Format" + strconv.Itoa(0) + ".mp4"
 	fmt.Printf("%s : %+v \n", videoname, video.Formats[0])
+
+	// TODO(lucy): instead of storing the file to disk - use the storagemanager
 	file, err := os.Create(videoname)
 	if err != nil {
 		panic(err)
