@@ -2,47 +2,53 @@ package scraper
 
 import (
 	"fmt"
-	"io"
-	"os"
-	"strconv"
+	"log"
+	"sync"
 
-	"github.com/kkdai/youtube/v2"
+	"github.com/Mulac/soundscraper/config"
+	"github.com/Mulac/soundscraper/util"
 )
 
-type Scraper interface {
-	Download()
+type DownloadType string
+
+const (
+	DOWNLOAD_YOUTUBE DownloadType = "youtube"
+)
+
+var downloadSingleton DownloadManager
+var once sync.Once
+
+func Download() DownloadManager {
+	once.Do(func() {
+		d, err := NewDownloadFactory().SetType(DownloadType(config.Manager().GetString(util.ENV_DOWNLOAD_IMPL))).New()
+		if err != nil {
+			log.Fatal(err)
+		}
+		downloadSingleton = d
+	})
+
+	return downloadSingleton
 }
 
-type scraperImpl struct {
+type downloadFactory struct {
+	dtype DownloadType
 }
 
-func (s scraperImpl) Download(videoID string) {
-	for i := 0; i < 22; i++ {
-		client := youtube.Client{}
+func (df *downloadFactory) SetType(dType DownloadType) DownloadFactory {
+	df.dtype = dType
+	return df
+}
 
-		video, err := client.GetVideo(videoID)
-		if err != nil {
-			print("error")
-		}
+func (df *downloadFactory) New() (DownloadManager, error) {
+	switch df.dtype {
+	case DOWNLOAD_YOUTUBE, "":
+		return newYoutubeDownloadManager()
 
-		resp, err := client.GetStream(video, &video.Formats[i])
-
-		if err != nil {
-			print("error")
-		}
-		defer resp.Body.Close()
-
-		videoname := "Format" + strconv.Itoa(i) + ".mp4"
-		fmt.Printf("%s : %+v \n", videoname, video.Formats[i])
-		file, err := os.Create(videoname)
-		if err != nil {
-			panic(err)
-		}
-		defer file.Close()
-
-		_, err = io.Copy(file, resp.Body)
-		if err != nil {
-			panic(err)
-		}
+	default:
+		return nil, fmt.Errorf("ERROR|DownloadFactory|download type %s not recognised", df.dtype)
 	}
+}
+
+func NewDownloadFactory() DownloadFactory {
+	return &downloadFactory{}
 }

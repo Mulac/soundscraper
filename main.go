@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/Mulac/soundscraper/scraper"
 	"github.com/Mulac/soundscraper/storage"
 )
 
 func main() {
 	fmt.Println("hello")
 
-	for id := range a list of Ids{
-		scraper.Youtube().Downlaod(id)
-	}
+	id := "YQHsXMglC9A"
+	scraper.Download().Download(id)
 
 	f, err := os.Open("README.md")
 	if err != nil {
