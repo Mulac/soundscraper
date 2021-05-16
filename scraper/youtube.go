@@ -2,31 +2,30 @@ package scraper
 
 import (
 	"fmt"
-	"io"
-	"os"
 	"strconv"
 
+	"github.com/Mulac/soundscraper/data"
+	"github.com/Mulac/soundscraper/storage"
 	"github.com/kkdai/youtube/v2"
 )
 
 type youtubeScraper struct {
+	client youtube.Client
 }
 
 func newYoutubeDownloadManager() (*youtubeScraper, error) {
-	return &youtubeScraper{}, nil
+	client := youtube.Client{}
+	return &youtubeScraper{client: client}, nil
 
 }
 
 func (s *youtubeScraper) Download(videoID string) error {
-	// TODO(lucy): put the client in the youtubeScraper struct so that we don't create new client each time we download a video
-	client := youtube.Client{}
-
-	video, err := client.GetVideo(videoID)
+	video, err := s.client.GetVideo(videoID)
 	if err != nil {
 		print("error")
 	}
 
-	resp, err := client.GetStream(video, &video.Formats[0])
+	resp, err := s.client.GetStream(video, &video.Formats[0])
 
 	if err != nil {
 		print("error")
@@ -37,15 +36,13 @@ func (s *youtubeScraper) Download(videoID string) error {
 	fmt.Printf("%s : %+v \n", videoname, video.Formats[0])
 
 	// TODO(lucy): instead of storing the file to disk - use the storagemanager
-	file, err := os.Create(videoname)
+	file, err := data.NewFile(videoname, resp.Body)
 	if err != nil {
-		panic(err)
+		return fmt.Errorf("ERROR|scraper/youtube|Download()|unable to find file|%v", err)
 	}
-	defer file.Close()
-
-	_, err = io.Copy(file, resp.Body)
+	storage.Drive().SaveFile(file)
 	if err != nil {
-		panic(err)
+		return fmt.Errorf("ERROR|scraper/youtube|Download()|error in saving the file|%v", err)
 	}
 
 	return nil
