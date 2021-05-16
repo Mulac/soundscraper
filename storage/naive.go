@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/Mulac/soundscraper/config"
+	"github.com/Mulac/soundscraper/data"
 	"github.com/Mulac/soundscraper/util"
 )
 
@@ -16,7 +17,7 @@ type naiveDriveManager struct {
 	root string
 }
 
-func (dm *naiveDriveManager) SaveFile(file *os.File) error {
+func (dm *naiveDriveManager) SaveFile(file data.File) error {
 	content, err := ioutil.ReadAll(file)
 	if err != nil {
 		return fmt.Errorf("ERROR|Drive/naive|SaveFile(%s)|unable to read contents from file|%v", file.Name(), err)

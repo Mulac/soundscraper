@@ -4,7 +4,8 @@ import (
 	"context"
 	"fmt"
 	"io/ioutil"
-	"os"
+
+	"github.com/Mulac/soundscraper/data"
 
 	"golang.org/x/oauth2/google"
 	gDrive "google.golang.org/api/drive/v3"
@@ -17,7 +18,7 @@ type googleDrive struct {
 	service *gDrive.Service
 }
 
-func (gd *googleDrive) SaveFile(file *os.File) error {
+func (gd *googleDrive) SaveFile(file data.File) error {
 	f := &gDrive.File{
 		Name:    file.Name(),
 		Parents: []string{FOLDER},

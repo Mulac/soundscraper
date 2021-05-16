@@ -1,7 +1,7 @@
 package storage
 
 import (
-	"os"
+	"github.com/Mulac/soundscraper/data"
 )
 
 // DriveManager is a facade for interacting with some kind of file store.
@@ -13,7 +13,7 @@ import (
 // we may need to store files elsewhere though, for example GoogleDrive, a network file system
 // or some other database like mongoDB.
 type DriveManager interface {
-	SaveFile(file *os.File) error
+	SaveFile(file data.File) error
 }
 
 // DriveFactory is how we can create new DriveManagers
