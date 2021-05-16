@@ -19,12 +19,12 @@ func (f *fileImpl) Name() string {
 	return f.FileName
 }
 
-func NewFile(name string, content *io.Reader) (File, error) {
+func NewFile(name string, content io.Reader) (File, error) {
 	if name == "" {
 		return nil, fmt.Errorf("NewFile()|cannot create file with no name")
 	}
 	return &fileImpl{
-		Reader: *content,
+		Reader: content,
 		FileName: name,
 	}, nil
 }
