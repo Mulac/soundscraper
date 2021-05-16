@@ -2,24 +2,15 @@ package main
 
 import (
 	"fmt"
-	"os"
-
-	"github.com/Mulac/soundscraper/scraper"
-	"github.com/Mulac/soundscraper/storage"
+	"log"
+	"net/http"
 )
 
 func main() {
-	fmt.Println("hello")
+	http.HandleFunc("/youtube/video", downloadYoutubeVideo)
 
-	id := "YQHsXMglC9A"
-	scraper.Download().Download(id)
-
-	f, err := os.Open("README.md")
-	if err != nil {
-		panic(err)
-	}
-	err = storage.Drive().SaveFile(f)
-	if err != nil {
-		panic(err)
+	fmt.Printf("Starting server at port 8080\n")
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		log.Fatal(err)
 	}
 }
