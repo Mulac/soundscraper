@@ -32,22 +32,22 @@ func Drive() DriveManager {
 }
 
 type driveFactory struct {
-	dtype DriveType
+	dType DriveType
 }
 
 func (df *driveFactory) SetType(dType DriveType) DriveFactory {
-	df.dtype = dType
+	df.dType = dType
 	return df
 }
 
 func (df *driveFactory) New() (DriveManager, error) {
-	switch df.dtype {
+	switch df.dType {
 	case DRIVE_NAIVE, "":
 		return newNaiveDriveManager()
 	case DRIVE_GOODLE:
 		return newGoogleDrive()
 	default:
-		return nil, fmt.Errorf("ERROR|DriveFactory|drive type %s not recognised", df.dtype)
+		return nil, fmt.Errorf("ERROR|DriveFactory|drive type %s not recognised", df.dType)
 	}
 }
 
